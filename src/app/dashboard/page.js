@@ -6,17 +6,9 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { auth } from "../../lib/firebase"; // Assuming firebase.js is configured with env vars
+import { auth } from "../../lib/firebase";
 
 import { onAuthStateChanged, signOut } from "firebase/auth";
-
-
-
-// Use environment variable for the API base URL
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-
 
 export default function DashboardPage() {
 
