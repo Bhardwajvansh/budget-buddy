@@ -28,7 +28,7 @@ const Navbar = () => {
   const navigationItems = [
     { name: "Jargon Simplifier", href: "/jargon-simplifier" },
     { name: "Financial Dashboard", href: "/analysis" },
-    { name: "Funding Finder", href: "/funding" },
+    { name: "AI Funding Pitch", href: "/funding" },
   ];
 
   useEffect(() => {
