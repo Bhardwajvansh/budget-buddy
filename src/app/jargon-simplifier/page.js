@@ -243,7 +243,7 @@ Make explanations conversational and practical in ${targetLanguage}. Focus on im
 
             <div className="relative z-10 container mx-auto px-6 pt-10 pb-10">
                 <div className="text-center mb-10">
-                    <div className="flex items-center justify-center space-x-3 mb-4">
+                    <div className="flex items-center justify-center space-x-3 mb-4 flex-wrap">
                         <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
                             <BookOpen className="w-8 h-8 text-white" />
                         </div>
@@ -331,7 +331,7 @@ Make explanations conversational and practical in ${targetLanguage}. Focus on im
                                             </div>
                                             <div>
                                                 <div className="text-white font-bold">{sample.title}</div>
-                                                <div className="text-gray-400 text-sm truncate">{sample.text.substring(0, 60)}...</div>
+                                                <div className="text-gray-400 text-sm">{sample.text.substring(0, 60)}...</div>
                                             </div>
                                         </div>
                                     </div>

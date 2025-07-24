@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { auth } from "../../lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-
-// Main Homepage Component
 export default function HomePage() {
     const router = useRouter();
     const [user, setUser] = useState(null);
@@ -46,12 +44,10 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white overflow-x-hidden">
-            {/* Background Effects */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
 
             <main className="relative z-10 container mx-auto px-6 text-center pt-20 pb-24">
-                {/* Hero Section */}
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-4xl lg:text-6xl font-extrabold mb-4 bg-gradient-to-r from-white via-purple-300 to-blue-300 bg-clip-text text-transparent">
                         {user
@@ -65,7 +61,6 @@ export default function HomePage() {
                     </p>
                 </div>
 
-                {/* Features Section */}
                 <div className="mt-24">
                     <h3 className="text-3xl font-bold mb-12">
                         Everything You Need to Master Your Finances
@@ -123,7 +118,6 @@ export default function HomePage() {
                 </div>
             </main>
 
-            {/* Footer */}
             <footer className="relative z-10 border-t border-white/10 text-center p-8">
                 <p className="text-gray-400">
                     &copy; {new Date().getFullYear()} Budget Buddy. All rights reserved.

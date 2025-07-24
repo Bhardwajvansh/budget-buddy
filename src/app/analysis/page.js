@@ -228,12 +228,12 @@ const FinancialAnalysisTable = () => {
 
             <div className="relative z-10 max-w-7xl mx-auto">
                 <div className="text-center mb-8">
-                    <div className="flex items-center justify-center space-x-3 mb-4">
+                    <div className="flex items-center justify-center space-x-3 mb-4 flex-wrap">
                         <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-2xl shadow-lg">
                             AI
                         </div>
                         <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                            Financial Insight Engine
+                            Financial Analysis
                         </h1>
                     </div>
                     <p className="text-gray-400 text-lg">

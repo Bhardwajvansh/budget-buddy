@@ -23,12 +23,10 @@ const AIFundingPitch = () => {
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
     useEffect(() => {
-        // Check for browser support
         if (!navigator.mediaDevices || !window.webkitSpeechRecognition) {
             setError('Your browser does not support audio recording or speech recognition.');
         }
 
-        // Initialize speech recognition
         if (window.webkitSpeechRecognition) {
             const recognition = new window.webkitSpeechRecognition();
             recognition.continuous = true;
@@ -85,12 +83,10 @@ const AIFundingPitch = () => {
             setIsRecording(true);
             setRecordingTime(0);
 
-            // Start speech recognition
             if (recognitionRef.current) {
                 recognitionRef.current.start();
             }
 
-            // Start timer
             timerRef.current = setInterval(() => {
                 setRecordingTime(prev => prev + 1);
             }, 1000);
@@ -265,8 +261,7 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                 <p className="text-xl text-gray-300 mb-10">AI-Powered Funding Pitch Analysis</p>
 
                 <div className="w-full max-w-6xl space-y-8">
-                    <div className="grid lg:grid-cols-2 gap-8">
-                        {/* Recording Section */}
+                        <div className="grid lg:grid-cols-2 gap-8">
                         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
                             <div className="flex items-center space-x-3 mb-6">
                                 <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
@@ -276,7 +271,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                             </div>
 
                             <div className="space-y-6">
-                                {/* Recording Controls */}
                                 <div className="flex items-center justify-center space-x-4">
                                     {!isRecording ? (
                                         <button
@@ -314,7 +308,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                     )}
                                 </div>
 
-                                {/* Recording Status */}
                                 <div className="text-center">
                                     {isRecording && (
                                         <div className="flex items-center justify-center space-x-2 text-red-400">
@@ -331,7 +324,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                     )}
                                 </div>
 
-                                {/* Transcript */}
                                 <div>
                                     <h4 className="text-lg font-semibold text-gray-300 mb-3">Your Pitch</h4>
                                     <textarea
@@ -342,7 +334,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                     />
                                 </div>
 
-                                {/* Analyze Button */}
                                 <button
                                     onClick={analyzePitch}
                                     disabled={!transcript.trim() || isAnalyzing}
@@ -368,7 +359,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                             <audio ref={audioRef} className="hidden" />
                         </div>
 
-                        {/* Analysis Results */}
                         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
                             <div className="flex items-center space-x-3 mb-6">
                                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
@@ -401,7 +391,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
 
                             {analysis ? (
                                 <div className="space-y-6">
-                                    {/* Overall Score */}
                                     <div className="text-center bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6">
                                         <h4 className="text-lg font-semibold text-gray-300 mb-2">Overall Score</h4>
                                         <div className={`text-4xl font-bold ${getScoreColor(analysis.overallScore)}`}>
@@ -412,7 +401,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                         </div>
                                     </div>
 
-                                    {/* Category Scores */}
                                     <div>
                                         <h4 className="text-lg font-semibold text-gray-300 mb-4">Detailed Scores</h4>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -436,7 +424,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                         </div>
                                     </div>
 
-                                    {/* Strengths & Weaknesses */}
                                     <div className="grid md:grid-cols-2 gap-6">
                                         <div>
                                             <h4 className="text-lg font-semibold text-green-400 mb-3">Strengths</h4>
@@ -463,7 +450,6 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                         </div>
                                     </div>
 
-                                    {/* Recommendations */}
                                     <div>
                                         <h4 className="text-lg font-semibold text-gray-300 mb-3">Recommendations</h4>
                                         <ul className="space-y-2">
@@ -476,13 +462,11 @@ Please evaluate the pitch on the following criteria and return a JSON object wit
                                         </ul>
                                     </div>
 
-                                    {/* Summary */}
                                     <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
                                         <h4 className="text-lg font-semibold text-blue-400 mb-2">Summary</h4>
                                         <p className="text-blue-300 leading-relaxed">{analysis.summary}</p>
                                     </div>
 
-                                    {/* Share Section */}
                                     <div className="pt-6 border-t border-white/10">
                                         <h4 className="text-lg font-semibold text-gray-300 mb-4">Share Your Pitch</h4>
                                         <div className="flex flex-col sm:flex-row gap-4">

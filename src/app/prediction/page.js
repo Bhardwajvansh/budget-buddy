@@ -262,16 +262,16 @@ const SMEForecastDashboard = () => {
             <div className="relative z-10 max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="flex items-center justify-center space-x-3 mb-4">
+                    <div className="flex items-center justify-center space-x-3 mb-4 flex-wrap">
                         <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold text-2xl shadow-lg">
                             AI
                         </div>
                         <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                            SME Financial Forecast Engine
+                            Revenue Prediction
                         </h1>
                     </div>
                     <p className="text-gray-400 text-lg">
-                        Upload your financial data for AI-powered forecasting and business insights
+                        Upload your financial data for AI powered forecasting and business insights
                     </p>
                 </div>
 
@@ -280,14 +280,14 @@ const SMEForecastDashboard = () => {
                     <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-6 gap-4">
                         <div>
                             <h2 className="text-2xl font-bold text-white mb-4">Data Input & Forecast</h2>
-                            <div className="flex items-center gap-4">
-                                <h3 className="text-lg font-semibold text-white">Forecast Period:</h3>
+                            <div className="flex items-center gap-4 flex-wrap">
+                                <h3 className="text-lg  font-semibold text-white">Forecast Period:</h3>
                                 <div className="flex gap-2">
                                     {[12, 24, 36, 48].map((period) => (
                                         <button
                                             key={period}
                                             onClick={() => setPredictionPeriod(period)}
-                                            className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                                            className={`px-4 text-sm py-2 rounded-lg transition-all duration-300 ${
                                                 predictionPeriod === period
                                                     ? 'bg-purple-600 text-white font-bold'
                                                     : 'bg-white/10 hover:bg-white/20'

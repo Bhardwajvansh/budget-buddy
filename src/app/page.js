@@ -1,5 +1,3 @@
-// app/page.js
-
 "use client";
 
 import { useEffect } from "react";
@@ -14,12 +12,11 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // If logged in, redirect to dashboard
         router.push("/Home");
       }
     });
 
-    return () => unsubscribe(); // Cleanup listener
+    return () => unsubscribe();
   }, [router]);
 
   return <AuthComponent />;

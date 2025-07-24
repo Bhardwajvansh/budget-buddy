@@ -5,7 +5,7 @@ import "./globals.css";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../lib/firebase"; // Make sure this path is correct for your project structure
+import { auth } from "../lib/firebase";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname(); // Hook to detect the current page
+  const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -49,19 +49,17 @@ const Navbar = () => {
     }
   };
 
-  // Handle navigation
   const handleNavigation = (href) => {
     router.push(href);
-    setIsMobileMenuOpen(false); // Close mobile menu on navigation
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <nav className="relative z-30 bg-black/20 backdrop-blur-lg border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavigation('/')}>
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold">
+            <div className="w-8 h-8 bg-gradient-to-r text-white from-purple-500 to-blue-500 rounded-lg flex items-center justify-center font-bold">
               B
             </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -69,7 +67,6 @@ const Navbar = () => {
             </h1>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {navigationItems.map((item) => (
@@ -87,7 +84,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* User Section */}
           <div className="hidden md:flex items-center space-x-4">
             {isLoading ? (
               <div className="w-20 h-8 bg-white/10 rounded-lg animate-pulse"></div>
@@ -115,7 +111,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -133,7 +128,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-black/40 backdrop-blur-lg border-t border-white/10">
           {navigationItems.map((item) => (

@@ -16,13 +16,11 @@ export default function DashboardPage() {
     const [documents, setDocuments] = useState([]);
     const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
 
-    // State for the custom modal
     const [showChunksModal, setShowChunksModal] = useState(false);
     const [chunksModalContent, setChunksModalContent] = useState("");
     const [chunksModalTitle, setChunksModalTitle] = useState("");
     const [isModalLoading, setIsModalLoading] = useState(false);
 
-    // Redirect if not logged in
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
@@ -33,9 +31,8 @@ export default function DashboardPage() {
         });
 
         return () => unsubscribe();
-    }, [router]); // Removed API_BASE_URL from dependencies
+    }, [router]);
 
-    // Load user documents from backend
     const loadUserDocuments = async (userId) => {
         if (!API_BASE_URL) {
             console.error("API_BASE_URL is not defined.");
@@ -57,7 +54,6 @@ export default function DashboardPage() {
         }
     };
 
-    // Handle file input
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -73,7 +69,6 @@ export default function DashboardPage() {
         }
     };
 
-    // Handle drag events
     const handleDrag = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -104,7 +99,6 @@ export default function DashboardPage() {
         }
     };
 
-    // Handle actual file upload to backend
     const handleUpload = async () => {
         if (!selectedFile || !user) {
             setUploadError(
@@ -118,11 +112,10 @@ export default function DashboardPage() {
         setUploadSuccess("");
 
         try {
-            // Create FormData to send file and user info
             const formData = new FormData();
             formData.append("file", selectedFile);
-            formData.append("user_id", "u1"); // Use actual user ID
-            formData.append("email", "himanshu.khojpur@gmail.com"); // Use actual user email
+            formData.append("user_id", "u1");
+            formData.append("email", "himanshu.khojpur@gmail.com");
 
             const response = await fetch(`${API_BASE_URL}/upload`, {
                 method: "POST",
@@ -136,14 +129,11 @@ export default function DashboardPage() {
                     `File uploaded successfully! Document ID: ${data.document_id}`
                 );
                 setSelectedFile(null);
-                // Reset file input
                 const fileInput = document.getElementById("file-upload");
                 if (fileInput) fileInput.value = "";
 
-                // Reload documents to show the new upload
                 await loadUserDocuments(user.uid);
 
-                // Navigate to chat page with document ID
                 router.push(`/chat?documentId=${data.document_id}`);
             } else {
                 setUploadError(data.error || "Upload failed");
@@ -160,7 +150,6 @@ export default function DashboardPage() {
         router.push(`/chat?documentId=${documentId}`);
     };
 
-    // View document chunks using a modal
     const viewDocumentChunks = async (documentId, fileName) => {
         if (!API_BASE_URL) {
             setChunksModalTitle("Error");
@@ -221,7 +210,6 @@ export default function DashboardPage() {
         });
     };
 
-    // Custom Modal Component
     const Modal = ({ show, title, content, onClose, isLoading }) => {
         if (!show) return null;
 
@@ -279,15 +267,11 @@ export default function DashboardPage() {
 
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white">
 
-            {/* Background Effects */}
-
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
 
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
 
 
-
-            {/* Header */}
 
             <div className="relative z-10 flex justify-between items-center p-6 lg:p-8">
 
@@ -375,11 +359,7 @@ export default function DashboardPage() {
 
 
 
-            {/* Main Content */}
-
             <div className="relative z-10 flex flex-col items-center px-6 lg:px-8 pb-20">
-
-                {/* Welcome Section */}
 
                 <div className="text-center mb-12">
 
@@ -398,8 +378,6 @@ export default function DashboardPage() {
 
 
                 <div className="w-full max-w-6xl space-y-8">
-
-                    {/* Upload Card */}
 
                     <div className="w-full max-w-lg mx-auto">
 
@@ -446,8 +424,6 @@ export default function DashboardPage() {
                             </div>
 
 
-
-                            {/* Drag & Drop Area */}
 
                             <div
 
@@ -563,8 +539,6 @@ export default function DashboardPage() {
 
 
 
-                            {/* File Info */}
-
                             {selectedFile && (
 
                                 <div className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex justify-between items-center">
@@ -651,8 +625,6 @@ export default function DashboardPage() {
 
 
 
-                            {/* Success Message */}
-
                             {uploadSuccess && (
 
                                 <div className="mt-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
@@ -695,8 +667,6 @@ export default function DashboardPage() {
 
 
 
-                            {/* Error Message */}
-
                             {uploadError && (
 
                                 <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
@@ -738,8 +708,6 @@ export default function DashboardPage() {
                             )}
 
 
-
-                            {/* Upload Button */}
 
                             <button
 
@@ -810,8 +778,6 @@ export default function DashboardPage() {
                     </div>
 
 
-
-                    {/* Documents List */}
 
                     {documents.length > 0 && (
 
@@ -1024,8 +990,6 @@ export default function DashboardPage() {
             </div>
 
 
-
-            {/* Custom Chunks Modal */}
 
             <Modal
 
