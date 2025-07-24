@@ -5,16 +5,6 @@ import { useRouter } from "next/navigation";
 import { auth } from "../../lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-// A reusable component for feature cards
-const FeatureCard = ({ icon, title, description }) => (
-    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 text-center transform hover:-translate-y-2 transition-transform duration-300">
-        <div className="mx-auto w-16 h-16 mb-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-            {icon}
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-gray-400">{description}</p>
-    </div>
-);
 
 // Main Homepage Component
 export default function HomePage() {
@@ -30,10 +20,10 @@ export default function HomePage() {
         return () => unsubscribe();
     }, []);
 
+
     const handleNavigation = (href) => {
         router.push(href);
     };
-
     const handleSignOut = async () => {
         try {
             await signOut(auth);
@@ -41,6 +31,18 @@ export default function HomePage() {
             console.error("Error signing out:", error);
         }
     };
+
+    const FeatureCard = ({ nav, icon, title, description }) => (
+        <div
+            onClick={() => handleNavigation(nav)}
+            className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 text-center transform hover:-translate-y-2 transition-transform duration-300">
+            <div className="mx-auto w-16 h-16 mb-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                {icon}
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+            <p className="text-gray-400">{description}</p>
+        </div>
+    );
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white overflow-x-hidden">
@@ -61,12 +63,6 @@ export default function HomePage() {
                             ? "Ready to manage your finances?"
                             : "Stop guessing, start growing. Automate budgeting, forecast cash flow, and get smart financial insights with the power of AI."}
                     </p>
-                    <button
-                        onClick={() => handleNavigation("/dashboard")}
-                        className="px-8 py-4 font-bold text-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:scale-105"
-                    >
-                        {user ? "Go to Dashboard" : "Get Started for Free"}
-                    </button>
                 </div>
 
                 {/* Features Section */}
@@ -76,6 +72,7 @@ export default function HomePage() {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                         <FeatureCard
+                            nav="/jargon-simplifier"
                             icon={
                                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -86,10 +83,12 @@ export default function HomePage() {
                                     />
                                 </svg>
                             }
-                            title="AI-Powered Budget Buddy"
-                            description="Upload expenses via CSV or invoices. Our AI summarizes spending and recommends smart monthly budgets."
+                            title="Financial Jargon Simplifier"
+                            description="Upload financial documents or text, and our AI breaks down complex jargon into simple, human-friendly language."
                         />
+
                         <FeatureCard
+                            nav="/analysis"
                             icon={
                                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -100,10 +99,12 @@ export default function HomePage() {
                                     />
                                 </svg>
                             }
-                            title="Smart Cash Flow Forecast"
-                            description="Visualize past and future cash flow. Get AI-powered predictions and warnings about risky trends before they happen."
+                            title="AI Financial Dashboard"
+                            description="Input monthly revenues and expenses or upload CSV files. Instantly get profit, margin analysis, and AI-powered insights."
                         />
+
                         <FeatureCard
+                            nav="/funding"
                             icon={
                                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -114,9 +115,10 @@ export default function HomePage() {
                                     />
                                 </svg>
                             }
-                            title="Auto-Categorize Expenses"
-                            description="Simply upload receipts or bank statements. AI extracts data, auto-categorizes everything, and flags anomalies."
+                            title="AI Pitch Analyzer"
+                            description="Record or type your funding pitch. Get instant feedback on clarity, confidence, and effectiveness to improve investor appeal."
                         />
+
                     </div>
                 </div>
             </main>
