@@ -1,569 +1,278 @@
 "use client";
 
-
-
 import { useEffect, useState } from "react";
-
 import { useRouter } from "next/navigation";
-
 import { auth } from "../../lib/firebase";
-
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function DashboardPage() {
-
     const router = useRouter();
-
     const [user, setUser] = useState(null);
-
     const [selectedFile, setSelectedFile] = useState(null);
-
     const [uploadError, setUploadError] = useState("");
-
     const [uploadSuccess, setUploadSuccess] = useState("");
-
     const [isUploading, setIsUploading] = useState(false);
-
     const [dragActive, setDragActive] = useState(false);
-
     const [documents, setDocuments] = useState([]);
-
     const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
 
-
-
     // State for the custom modal
-
     const [showChunksModal, setShowChunksModal] = useState(false);
-
     const [chunksModalContent, setChunksModalContent] = useState("");
-
     const [chunksModalTitle, setChunksModalTitle] = useState("");
-
     const [isModalLoading, setIsModalLoading] = useState(false);
 
-
-
     // Redirect if not logged in
-
     useEffect(() => {
-
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-
             if (currentUser) {
-
                 setUser(currentUser);
-
-                // Load user documents when user is authenticated
-
-                // Ensure API_BASE_URL is available before calling loadUserDocuments
-
-                if (API_BASE_URL) {
-
-                    loadUserDocuments(currentUser.uid);
-
-                }
-
             } else {
-
                 router.push("/");
-
             }
-
         });
 
-
-
         return () => unsubscribe();
-
-    }, [router, API_BASE_URL]); // Added API_BASE_URL to dependencies
-
-
+    }, [router]); // Removed API_BASE_URL from dependencies
 
     // Load user documents from backend
-
     const loadUserDocuments = async (userId) => {
-
         if (!API_BASE_URL) {
-
             console.error("API_BASE_URL is not defined.");
-
             return;
-
         }
-
         setIsLoadingDocuments(true);
-
         try {
-
             const response = await fetch(`${API_BASE_URL}/users/${userId}/documents`);
-
             if (response.ok) {
-
                 const data = await response.json();
-
                 setDocuments(data.documents || []);
-
             } else {
-
                 console.error("Failed to load documents");
-
             }
-
         } catch (error) {
-
             console.error("Error loading documents:", error);
-
         } finally {
-
             setIsLoadingDocuments(false);
-
         }
-
     };
-
-
 
     // Handle file input
-
     const handleFileChange = (e) => {
-
         const file = e.target.files[0];
-
         if (!file) return;
 
-
-
         const validTypes = ["application/pdf", "text/plain"];
-
         if (!validTypes.includes(file.type)) {
-
             setUploadError("Only PDF and TXT files are allowed.");
-
             setSelectedFile(null);
-
         } else {
-
             setSelectedFile(file);
-
             setUploadError("");
-
             setUploadSuccess("");
-
         }
-
     };
-
-
 
     // Handle drag events
-
     const handleDrag = (e) => {
-
         e.preventDefault();
-
         e.stopPropagation();
-
         if (e.type === "dragenter" || e.type === "dragover") {
-
             setDragActive(true);
-
         } else if (e.type === "dragleave") {
-
             setDragActive(false);
-
         }
-
     };
-
-
 
     const handleDrop = (e) => {
-
         e.preventDefault();
-
         e.stopPropagation();
-
         setDragActive(false);
 
-
-
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-
             const file = e.dataTransfer.files[0];
-
             const validTypes = ["application/pdf", "text/plain"];
 
-
-
             if (!validTypes.includes(file.type)) {
-
                 setUploadError("Only PDF and TXT files are allowed.");
-
                 setSelectedFile(null);
-
             } else {
-
                 setSelectedFile(file);
-
                 setUploadError("");
-
                 setUploadSuccess("");
-
             }
-
         }
-
     };
 
-
-
     // Handle actual file upload to backend
-
     const handleUpload = async () => {
-
         if (!selectedFile || !user) {
-
             setUploadError(
-
                 "Please select a valid file and ensure you are logged in."
-
             );
-
             return;
-
         }
-
-        if (!API_BASE_URL) {
-
-            setUploadError("API Base URL is not configured.");
-
-            return;
-
-        }
-
-
 
         setIsUploading(true);
-
         setUploadError("");
-
         setUploadSuccess("");
 
-
-
         try {
-
             // Create FormData to send file and user info
-
             const formData = new FormData();
-
             formData.append("file", selectedFile);
-
             formData.append("user_id", "u1"); // Use actual user ID
-
             formData.append("email", "himanshu.khojpur@gmail.com"); // Use actual user email
 
-
-
             const response = await fetch(`${API_BASE_URL}/upload`, {
-
                 method: "POST",
-
                 body: formData,
-
             });
-
-
 
             const data = await response.json();
 
-
-
             if (response.ok && data.success) {
-
                 setUploadSuccess(
-
                     `File uploaded successfully! Document ID: ${data.document_id}`
-
                 );
-
                 setSelectedFile(null);
-
                 // Reset file input
-
                 const fileInput = document.getElementById("file-upload");
-
                 if (fileInput) fileInput.value = "";
 
-
-
                 // Reload documents to show the new upload
-
                 await loadUserDocuments(user.uid);
 
-
-
                 // Navigate to chat page with document ID
-
                 router.push(`/chat?documentId=${data.document_id}`);
-
             } else {
-
                 setUploadError(data.error || "Upload failed");
-
             }
-
         } catch (error) {
-
             console.error("Upload error:", error);
-
             setUploadError("Network error. Please check if the backend is running.");
-
         } finally {
-
             setIsUploading(false);
-
         }
-
     };
-
-
 
     const chatWithDocument = (documentId) => {
-
         router.push(`/chat?documentId=${documentId}`);
-
     };
-
-
 
     // View document chunks using a modal
-
     const viewDocumentChunks = async (documentId, fileName) => {
-
         if (!API_BASE_URL) {
-
             setChunksModalTitle("Error");
-
             setChunksModalContent("API Base URL is not configured.");
-
             setShowChunksModal(true);
-
             return;
-
         }
-
-
 
         setIsModalLoading(true);
-
         setChunksModalTitle(`Chunks for "${fileName}"`);
-
         setChunksModalContent("Loading chunks...");
-
         setShowChunksModal(true);
 
-
-
         try {
-
             const response = await fetch(
-
                 `${API_BASE_URL}/documents/${documentId}/chunks`
-
             );
-
             if (response.ok) {
-
                 const data = await response.json();
-
                 if (data.chunks && data.chunks.length > 0) {
-
                     const formattedChunks = data.chunks
-
                         .map(
-
                             (chunk, index) =>
-
-                                `- **Chunk ${index + 1}:**\n  \`\`\`\n${chunk}\n\`\`\`\n`
-
+                                `- **Chunk ${index + 1}:**\n  \`\`\`\n${chunk}\n\`\`\`\n`
                         )
-
                         .join("\n");
-
                     setChunksModalContent(formattedChunks);
-
                 } else {
-
                     setChunksModalContent("No chunks found for this document.");
-
                 }
-
             } else {
-
                 setChunksModalContent("Failed to load chunks.");
-
                 console.error("Failed to fetch chunks:", await response.text());
-
             }
-
         } catch (error) {
-
             console.error("Error fetching chunks:", error);
-
             setChunksModalContent("Error fetching chunks. Please try again.");
-
         } finally {
-
             setIsModalLoading(false);
-
         }
-
     };
-
-
 
     const formatFileSize = (bytes) => {
-
         if (bytes === 0) return "0 Bytes";
-
         const k = 1024;
-
         const sizes = ["Bytes", "KB", "MB", "GB"];
-
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-
     };
-
-
 
     const formatDate = (dateString) => {
-
         return new Date(dateString).toLocaleDateString("en-US", {
-
             year: "numeric",
-
             month: "short",
-
             day: "numeric",
-
             hour: "2-digit",
-
             minute: "2-digit",
-
         });
-
     };
-
-
 
     // Custom Modal Component
-
     const Modal = ({ show, title, content, onClose, isLoading }) => {
-
         if (!show) return null;
 
-
-
         return (
-
             <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-
                 <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-
                     <div className="flex justify-between items-center p-4 border-b border-gray-700">
-
                         <h2 className="text-xl font-bold text-white">{title}</h2>
-
                         <button
-
                             onClick={onClose}
-
                             className="text-gray-400 hover:text-white transition-colors"
-
                         >
-
                             <svg
-
                                 className="w-6 h-6"
-
                                 fill="none"
-
                                 stroke="currentColor"
-
                                 viewBox="0 0 24 24"
-
                             >
-
                                 <path
-
                                     strokeLinecap="round"
-
                                     strokeLinejoin="round"
-
                                     strokeWidth={2}
-
                                     d="M6 18L18 6M6 6l12 12"
-
                                 />
-
                             </svg>
-
                         </button>
-
                     </div>
-
                     <div className="p-4 flex-1 overflow-y-auto text-gray-200 markdown-content">
-
                         {isLoading ? (
-
                             <div className="flex items-center justify-center py-8">
-
                                 <div className="w-6 h-6 border-2 border-purple-400/30 border-t-purple-400 rounded-full animate-spin"></div>
-
                                 <span className="ml-3 text-gray-400">Loading...</span>
-
                             </div>
-
                         ) : (
-
                             <pre className="whitespace-pre-wrap font-mono text-sm break-words">
-
                                 {content}
-
                             </pre>
-
                         )}
-
                     </div>
-
                     <div className="p-4 border-t border-gray-700 flex justify-end">
-
                         <button
-
                             onClick={onClose}
-
                             className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-
                         >
-
                             Close
-
                         </button>
-
                     </div>
-
                 </div>
-
             </div>
-
         );
-
     };
-
 
 
     return (
