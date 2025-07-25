@@ -19,7 +19,7 @@ const AIFundingPitch = () => {
     const recognitionRef = useRef(null);
     const timerRef = useRef(null);
 
-    const GEMINI_API_KEY = 'AIzaSyBmvKYTmirmMMIguzcnCGq6K0BC3CMJXU0';
+    const GEMINI_API_KEY = 'AIzaSyAuYknzhnY40TVetD5YGTvreMlt3TyDZ2I';
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
     useEffect(() => {

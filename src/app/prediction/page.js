@@ -19,7 +19,7 @@ const SMEForecastDashboard = () => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [predictionPeriod, setPredictionPeriod] = useState(24);
 
-    const GEMINI_API_KEY = 'AIzaSyBmvKYTmirmMMIguzcnCGq6K0BC3CMJXU0';
+    const GEMINI_API_KEY = 'AIzaSyAuYknzhnY40TVetD5YGTvreMlt3TyDZ2I';
     const FORECAST_API_URL = 'https://bb-backend-693559507420.asia-south1.run.app/forecast';
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
